@@ -14,10 +14,16 @@ class Person < ActiveRecord::Base
   end
 
   def self.with_employees
-    joins(:employees).distinct
+    from(
+      joins(:employees).distinct,
+      :people
+    )
   end
 
   def self.with_local_coworkers
-    joins(location: :people).where("people_locations.id <> people.id").distinct
+    from(
+      joins(location: :people).where("people_locations.id <> people.id").distinct,
+      :people
+    )
   end
 end

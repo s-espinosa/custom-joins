@@ -94,11 +94,6 @@ describe Person do
 
   describe ".with_employees.with_local_coworkers.order_by_location_name" do
     it "combines scopes" do
-      pending(<<-TEXT)
-
-        Rewrite with_employees and with_local_coworkers to make this spec pass.
-      TEXT
-
       # Create locations 1, 2, and 3.
       locations = [
         create(:location, name: "location1"),
