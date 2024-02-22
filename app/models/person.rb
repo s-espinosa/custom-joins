@@ -5,7 +5,8 @@ class Person < ActiveRecord::Base
   has_many :employees, class_name: "Person", foreign_key: :manager_id
 
   def self.without_remote_manager
-    all
+    left_outer_joins(:manager)
+      .where("managers_people.location_id != 2 OR managers_people IS NULL")
   end
 
   def self.order_by_location_name

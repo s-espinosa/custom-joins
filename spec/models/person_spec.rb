@@ -3,8 +3,6 @@ require "spec_helper"
 describe Person do
   describe "#without_remote_manager" do
     it "returns people who have no manager or whose manager is local" do
-      pending "Implement without_remote_manager to make this spec pass"
-
       local = create(:location)
       remote = create(:location)
       local_manager = create(
@@ -101,21 +99,30 @@ describe Person do
         Rewrite with_employees and with_local_coworkers to make this spec pass.
       TEXT
 
+      # Create locations 1, 2, and 3.
       locations = [
         create(:location, name: "location1"),
         create(:location, name: "location3"),
         create(:location, name: "location2")
       ]
+
+      # For each location create a coworker and a manager.
       managers = locations.map do |location|
         create(:person, name: "coworker-#{location.name}", location: location)
+        # Return the manager, but not the coworker to the map.
         create(:person, name: "manager-#{location.name}", location: location)
       end
+
+      # For each manager, create two people managed by the manager.
       managers.each do |manager|
         2.times do
           create(:person, name: "employee-#{manager.name}", manager: manager)
         end
       end
 
+      # Get the managers (e.g. people who have a person with them as a manager)
+      # Check to see if they have a coworker in the same location
+      # Order by location name
       result = Person.with_employees.with_local_coworkers.order_by_location_name
 
       expect(result.map(&:name)).to eq(%w(
